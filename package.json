@@ -1,0 +1,22 @@
+{
+    "name": "cordova-plugin-android-takuad",
+    "version": "1.0.0",
+    "cordova": {
+        "id": "cordova-plugin-android-takuad",
+        "platforms": [
+            "android"
+        ]
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Dengdads/cordova-plugin-android-takuad.git"
+    },
+    "keywords": [
+        "cordova",
+        "taku",
+        "cordova-android"
+    ],
+    "description": "Cordova Plugin for TakuAd",
+    "author": "Dengdads",
+    "license": "MIT"
+}

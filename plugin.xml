@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns:android="http://schemas.android.com/apk/res/android"
+    id="cordova-plugin-android-takuad" version="1.0.0"
+    xmlns="http://apache.org/cordova/ns/plugins/1.0">
+    <name>TakuAD</name>
+    <description>Cordova Plugin for Android,a JS version of Taku SDK</description>
+    <license>MIT</license>
+    <keywords></keywords>
+    <repo>https://github.com/dengdads/cordova-plugin-android-takuad.git</repo>
+    <issue>https://github.com/dengdads/cordova-plugin-android-takuad/issues</issue>
+
+    <!-- android -->
+    <platform name="android">
+        <js-module name="plugin" src="www/plugin.js">
+            <runs />
+            <clobbers target="takuAd" />
+        </js-module>
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="TakuAd">
+                <param name="android-package" value="com.dengdads.takuad.AD" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+        <config-file parent="/manifest" target="AndroidManifest.xml">
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+            <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+            <!--<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />-->
+            <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
+            <!--    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />-->
+            <!--    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
+            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+            <uses-permission android:name="android.permission.GET_TASKS" />
+            <uses-permission android:name="android.permission.WAKE_LOCK" />
+            <!--<uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>-->
+            <!--    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />-->
+            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+            <meta-data tools:replace="android:value" android:name="hw_ads_sdk_type" android:value="6" />
+
+            
+            <provider
+            android:name="com.sigmob.sdk.SigmobFileV4Provider"
+            android:authorities="com.demo.taku.sigprovider"
+            android:exported="false"
+            android:initOrder="200"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/anythink_bk_sigmob_file_path"/>
+            </provider>
+            <!-- source file: china/network_sdk/csj/6.2.1.9/AndroidManifest.xml -->
+            <provider
+                android:name="com.bytedance.sdk.openadsdk.multipro.TTMultiProvider"
+                android:authorities="com.demo.taku.TTMultiProvider"
+                android:exported="false" />
+            <provider
+                android:name="com.bytedance.sdk.openadsdk.TTFileProvider"
+                android:authorities="com.demo.taku.TTFileProvider"
+                android:exported="false"
+                android:grantUriPermissions="true">
+                <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/anythink_bk_tt_file_path" />
+            </provider>
+            <!-- source file: china/network_sdk/oppo/5.8.0.004/AndroidManifest.xml -->
+            <!-- source file: china/network_sdk/klevin/2.11.0.3/AndroidManifest.xml -->
+
+            <provider
+                android:name="com.tencent.klevin.utils.FileProvider"
+                android:authorities="com.demo.taku.klevin.fileProvider"
+                android:exported="false"
+                android:grantUriPermissions="true">
+                <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/anythink_bk_klevin_file_path"/>
+            </provider>
+            <!-- source file: china/network_sdk/qumeng/3.465.10.431/AndroidManifest.xml -->
+            <!-- source file: china/network_sdk/mimo/5.3.2/AndroidManifest.xml -->
+            <!-- source file: china/network_sdk/vivo/6.1.5.1/AndroidManifest.xml -->
+            <!-- source file: china/network_sdk/gdt/4.591.1461/AndroidManifest.xml -->
+
+            <provider
+                android:name="com.qq.e.comm.GDTFileProvider"
+                android:authorities="com.demo.taku.gdt.fileprovider"
+                android:exported="false"
+                android:grantUriPermissions="true">
+                <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/anythink_bk_gdt_file_path" />
+            </provider>
+            <!-- source file: china/network_sdk/tap/3.16.3.31/AndroidManifest.xml -->
+        </config-file>
+        <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest">
+            <manifest xmlns:tools="http://schemas.android.com/tools"/>
+        </edit-config>
+        <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <application android:allowBackup="true" tools:replace="android:allowBackup" android:networkSecurityConfig="@xml/network_security_config" />
+        </edit-config>
+        <source-file src="src/android/com/dengdads/takuad/AD.java" target-dir="src/com/dengdads/takuad"/>
+        <resource-file src="src/android/libs/" target="libs"/>
+        <resource-file src="src/android/res/xml/network_security_config.xml"
+            target="res/xml/network_security_config.xml" />
+        <resource-file src="src/android/res/xml/anythink_bk_gdt_file_path.xml"
+            target="res/xml/anythink_bk_gdt_file_path.xml" />
+        <resource-file src="src/android/res/xml/anythink_bk_klevin_file_path.xml"
+            target="res/xml/anythink_bk_klevin_file_path.xml" />
+        <resource-file src="src/android/res/xml/anythink_bk_sigmob_file_path.xml"
+            target="res/xml/anythink_bk_sigmob_file_path.xml" />
+        <resource-file src="src/android/res/xml/anythink_bk_tt_file_path.xml"
+            target="res/xml/anythink_bk_tt_file_path.xml" />
+        <framework src="android-build.gradle" custom="true" type="gradleReference" />
+    </platform>
+</plugin>
