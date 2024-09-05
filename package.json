@@ -1,6 +1,6 @@
 {
     "name": "cordova-plugin-android-takuad",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "cordova": {
         "id": "cordova-plugin-android-takuad",
         "platforms": [
@@ -17,6 +17,6 @@
         "cordova-android"
     ],
     "description": "Cordova Plugin for TakuAd",
-    "author": "Dengdads",
+    "author": "dengdads",
     "license": "MIT"
 }
