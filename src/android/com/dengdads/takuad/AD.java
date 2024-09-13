@@ -1,7 +1,9 @@
 package com.dengdads.takuad;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,7 @@ public class AD extends CordovaPlugin{
     public void initTaku(String appId,String appKey,String splashAdPlacementId,String rewardAdPlacementId)
     {
         ATSDK.init(_context, appId, appKey);
+        ATSDK.start();
         _splashAdPlacementId =splashAdPlacementId;
         _rewardAdPlacementId=rewardAdPlacementId;
         _splashAd=new ATSplashAd(_context, _splashAdPlacementId,new ATSplashExListenerImpl());
@@ -82,6 +85,49 @@ public class AD extends CordovaPlugin{
 
         return false;
     }
+    private void requestPermission()
+    {
+        //cordova.requestPermission(this,100,Manifest.per++ission.READ_PHONE_STATE);
+        cordova.requestPermissions(this,100, new String[]{
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_NETWORK_STATE
+        });
+        //requestPermissions(100);
+        //requestPermissions(100);
+    }
+
+    @Override
+    public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
+        Log.d(TAG, "RequestCode:"+requestCode);
+        switch (requestCode) {
+            case 100:
+                Log.d(TAG, "onRequestPermissionsResult: Success");
+                for (int i = 0; i < permissions.length; i++) {
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                        // 权限授予了
+                        if (Manifest.permission.READ_PHONE_STATE.equals(permissions[i])) {
+                            Log.d(TAG, "onRequestPermissionsResult: READ_PHONE_STATE GRANTED");
+                            // 执行与 READ_PHONE_STATE 相关的操作
+                        } else if (Manifest.permission.READ_EXTERNAL_STORAGE.equals(permissions[i])) {
+                            Log.d(TAG, "onRequestPermissionsResult: READ_EXTERNAL_STORAGE GRANTED");
+                            // 执行与 READ_EXTERNAL_STORAGE 相关的操作
+                        }
+                    } else {
+                        // 权限被拒绝
+                        if (Manifest.permission.READ_PHONE_STATE.equals(permissions[i])) {
+                            // 处理拒绝 READ_PHONE_STATE 的情况
+                        } else if (Manifest.permission.READ_EXTERNAL_STORAGE.equals(permissions[i])) {
+                            // 处理拒绝 READ_EXTERNAL_STORAGE 的情况
+                        }
+                    }
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
     private void triggerEvent(String eventName, String eventData) {
         String js = String.format("javascript:cordova.fireDocumentEvent('%s', %s);", eventName, eventData);
         webView.getEngine().evaluateJavascript(js, null);
