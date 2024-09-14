@@ -16,6 +16,9 @@ var takuAd = {
             rewardAdPlacementId,
         ]);
     },
+    requestPermission: function () {
+        exec(null, null, "TakuAd", "requestPermission", []);
+    },
     loadSplashAd: function () {
         exec(null, null, "TakuAd", "loadSplashAd", []);
     },
