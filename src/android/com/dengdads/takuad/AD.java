@@ -24,8 +24,8 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
 import org.json.JSONException;
 
-public class AD extends CordovaPlugin{
-    private static final String TAG="TakuAd";
+public class AD extends CordovaPlugin {
+    private static final String TAG = "TakuAd";
     private ATSplashAd _splashAd;
     private ATRewardVideoAd _rewardAd;
     private Context _context;
@@ -33,22 +33,23 @@ public class AD extends CordovaPlugin{
     private FrameLayout _container;
     private String _splashAdPlacementId;
     private String _rewardAdPlacementId;
-    public void initTaku(String appId,String appKey,String splashAdPlacementId,String rewardAdPlacementId)
-    {
+
+    public void initTaku(String appId, String appKey, String splashAdPlacementId, String rewardAdPlacementId) {
         ATSDK.init(_context, appId, appKey);
         ATSDK.start();
-        _splashAdPlacementId =splashAdPlacementId;
-        _rewardAdPlacementId=rewardAdPlacementId;
-        _splashAd=new ATSplashAd(_context, _splashAdPlacementId,new ATSplashExListenerImpl());
+        _splashAdPlacementId = splashAdPlacementId;
+        _rewardAdPlacementId = rewardAdPlacementId;
+        _splashAd = new ATSplashAd(_context, _splashAdPlacementId, new ATSplashExListenerImpl());
         _splashAd.loadAd();
         _rewardAd = new ATRewardVideoAd(_context, _rewardAdPlacementId);
     }
+
     @Override
-    public void pluginInitialize(){
+    public void pluginInitialize() {
         super.pluginInitialize();
         // your init code here
-        _context=cordova.getContext();
-        _activity=cordova.getActivity();
+        _context = cordova.getContext();
+        _activity = cordova.getActivity();
         //initTaku("a62b013be01931", "c3d0d2a9a9d451b07e62b509659f7c97","b62b0272f8762f");
         addFullScreenContainer();
     }
@@ -57,23 +58,27 @@ public class AD extends CordovaPlugin{
     @Override
     public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
         Log.d(TAG, String.format("%s is called. Callback ID: %s.", action, callbackContext.getCallbackId()));
-        if(action.equals("initTaku")){
-            this.initTaku(args.getString(0), args.getString(1),args.getString(2),args.getString(3));
+        if (action.equals("initTaku")) {
+            this.initTaku(args.getString(0), args.getString(1), args.getString(2), args.getString(3));
             callbackContext.success();
-            return  true;
+            return true;
+        } else if (action.equals("requestPermission")) {
+            this.requestPermission();
+            callbackContext.success();
+            return true;
         } else if (action.equals("loadSplashAd")) {
             this.loadSplashAd();
             callbackContext.success();
             return true;
-        }else if(action.equals("showSplashAd")){
+        } else if (action.equals("showSplashAd")) {
             this.showSplashAd();
             callbackContext.success();
             return true;
-        }else if (action.equals("loadRewardAd")) {
+        } else if (action.equals("loadRewardAd")) {
             this.loadRewardAd();
             callbackContext.success();
             return true;
-        }else if(action.equals("showRewardAd")){
+        } else if (action.equals("showRewardAd")) {
             this.showRewardAd();
             callbackContext.success();
             return true;
@@ -85,13 +90,13 @@ public class AD extends CordovaPlugin{
 
         return false;
     }
-    private void requestPermission()
-    {
+
+    private void requestPermission() {
         //cordova.requestPermission(this,100,Manifest.per++ission.READ_PHONE_STATE);
-        cordova.requestPermissions(this,100, new String[]{
+        cordova.requestPermissions(this, 100, new String[]{
                 Manifest.permission.READ_PHONE_STATE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.ACCESS_NETWORK_STATE
+                // Manifest.permission.READ_EXTERNAL_STORAGE,
+                // Manifest.permission.ACCESS_NETWORK_STATE
         });
         //requestPermissions(100);
         //requestPermissions(100);
@@ -99,27 +104,29 @@ public class AD extends CordovaPlugin{
 
     @Override
     public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
-        Log.d(TAG, "RequestCode:"+requestCode);
+        Log.d(TAG, "RequestCode:" + requestCode);
         switch (requestCode) {
             case 100:
-                Log.d(TAG, "onRequestPermissionsResult: Success");
                 for (int i = 0; i < permissions.length; i++) {
                     if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                         // 权限授予了
                         if (Manifest.permission.READ_PHONE_STATE.equals(permissions[i])) {
                             Log.d(TAG, "onRequestPermissionsResult: READ_PHONE_STATE GRANTED");
                             // 执行与 READ_PHONE_STATE 相关的操作
-                        } else if (Manifest.permission.READ_EXTERNAL_STORAGE.equals(permissions[i])) {
-                            Log.d(TAG, "onRequestPermissionsResult: READ_EXTERNAL_STORAGE GRANTED");
-                            // 执行与 READ_EXTERNAL_STORAGE 相关的操作
                         }
+//                        else if (Manifest.permission.READ_EXTERNAL_STORAGE.equals(permissions[i])) {
+//                            Log.d(TAG, "onRequestPermissionsResult: READ_EXTERNAL_STORAGE GRANTED");
+//                            // 执行与 READ_EXTERNAL_STORAGE 相关的操作
+//                        }
                     } else {
                         // 权限被拒绝
                         if (Manifest.permission.READ_PHONE_STATE.equals(permissions[i])) {
+                            Log.d(TAG, "onRequestPermissionsResult: READ_PHONE_STATE REFUSED");
                             // 处理拒绝 READ_PHONE_STATE 的情况
-                        } else if (Manifest.permission.READ_EXTERNAL_STORAGE.equals(permissions[i])) {
-                            // 处理拒绝 READ_EXTERNAL_STORAGE 的情况
                         }
+//                        else if (Manifest.permission.READ_EXTERNAL_STORAGE.equals(permissions[i])) {
+//                            // 处理拒绝 READ_EXTERNAL_STORAGE 的情况
+//                        }
                     }
                 }
                 break;
@@ -132,8 +139,8 @@ public class AD extends CordovaPlugin{
         String js = String.format("javascript:cordova.fireDocumentEvent('%s', %s);", eventName, eventData);
         webView.getEngine().evaluateJavascript(js, null);
     }
-    private void setContainerVisiable()
-    {
+
+    private void setContainerVisiable() {
         _activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -141,12 +148,12 @@ public class AD extends CordovaPlugin{
             }
         });
     }
-    private void addFullScreenContainer()
-    {
+
+    private void addFullScreenContainer() {
         _activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                _container=new FrameLayout(_activity);
+                _container = new FrameLayout(_activity);
 
                 // 设置 LayoutParams 为全屏
                 FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
@@ -164,23 +171,25 @@ public class AD extends CordovaPlugin{
             }
         });
     }
-    public void loadSplashAd()
-    {
+
+    public void loadSplashAd() {
         _splashAd.loadAd();
     }
-    public void loadRewardAd()
-    {
+
+    public void loadRewardAd() {
         _rewardAd.setAdListener(new ATRewardVideoListener() {
             @Override
             public void onRewardedVideoAdLoaded() {
             }
+
             @Override
             public void onRewardedVideoAdFailed(AdError adError) {
                 //注意：禁止在此回调中执行广告的加载方法进行重试，否则会引起很多无用请求且可能会导致应用卡顿
                 //AdError，请参考 https://docs.takuad.com/#/zh-cn/android/android_doc/android_test?id=aderror
                 Log.e(TAG, "onRewardedVideoAdFailed:" + adError.getFullErrorInfo());
-                triggerEvent("RewardAdLoadFailed",adError.getFullErrorInfo());
+                triggerEvent("RewardAdLoadFailed", adError.getFullErrorInfo());
             }
+
             @Override
             public void onRewardedVideoAdPlayStart(ATAdInfo adInfo) {
                 //ATAdInfo可区分广告平台以及获取广告平台的广告位ID等
@@ -189,54 +198,60 @@ public class AD extends CordovaPlugin{
                 //建议在此回调中调用load进行广告的加载，方便下一次广告的展示（不需要调用isAdReady()）
                 _rewardAd.load();
             }
+
             @Override
             public void onRewardedVideoAdPlayEnd(ATAdInfo atAdInfo) {
             }
+
             @Override
             public void onRewardedVideoAdPlayFailed(AdError adError, ATAdInfo atAdInfo) {
                 //AdError，请参考 https://docs.takuad.com/#/zh-cn/android/android_doc/android_test?id=aderror
                 Log.e(TAG, "onRewardedVideoAdPlayFailed:" + adError.getFullErrorInfo());
             }
+
             @Override
             public void onRewardedVideoAdClosed(ATAdInfo atAdInfo) {
             }
+
             @Override
             public void onReward(ATAdInfo atAdInfo) {
-                triggerEvent("RewardAdSuccess","");
+                triggerEvent("RewardAdSuccess", "");
                 //建议在此回调中下发奖励，一般在onRewardedVideoAdClosed之前回调
             }
+
             @Override
             public void onRewardedVideoAdPlayClicked(ATAdInfo atAdInfo) {
             }
         });
         _rewardAd.load();
     }
+
     public void showSplashAd() {
         ATSplashAd.entryAdScenario(_splashAdPlacementId, "splash_ad_show_1");
         setContainerVisiable();
         _splashAd.show(_activity, _container);
     }
-    public void showRewardAd(){
-        if(_rewardAd.isAdReady())
-        {
+
+    public void showRewardAd() {
+        if (_rewardAd.isAdReady()) {
             _rewardAd.show(_activity);
-        }
-        else
-        {
+        } else {
             _rewardAd.load();
         }
     }
+
     public int isSplashAdReady() {
-        if(_splashAd.isAdReady())
+        if (_splashAd.isAdReady())
             return 1;
         else
             return 0;
     }
+
     class ATSplashExListenerImpl implements ATSplashAdListener {
 
         @Override
         public void onAdLoaded(boolean b) {
-            Log.d(TAG, "onAdLoaded: "+b);
+            Log.d(TAG, "onAdLoaded: " + b);
             showSplashAd();
         }
 
@@ -247,8 +262,8 @@ public class AD extends CordovaPlugin{
 
         @Override
         public void onNoAdError(AdError adError) {
-            Log.d(TAG, "onNoAdError: "+adError.getFullErrorInfo());
-            triggerEvent("SplashAdLoadFailed",adError.getFullErrorInfo());
+            Log.d(TAG, "onNoAdError: " + adError.getFullErrorInfo());
+            triggerEvent("SplashAdLoadFailed", adError.getFullErrorInfo());
         }
 
         @Override
