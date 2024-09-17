@@ -1,6 +1,6 @@
 {
     "name": "cordova-plugin-android-takuad",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "cordova": {
         "id": "cordova-plugin-android-takuad",
         "platforms": [
