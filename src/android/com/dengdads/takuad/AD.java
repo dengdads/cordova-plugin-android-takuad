@@ -136,7 +136,7 @@ public class AD extends CordovaPlugin {
     }
 
     private void triggerEvent(String eventName, String eventData) {
-        String js = String.format("javascript:cordova.fireDocumentEvent('%s', %s);", eventName, eventData);
+        String js = String.format("javascript:cordova.fireDocumentEvent('%s', '%s');", eventName, eventData);
         webView.getEngine().evaluateJavascript(js, null);
     }
 
